@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: helpdesk-db
+    environment:
+      POSTGRES_DB: helpdesk_db
+      POSTGRES_USER: helpdesk
+      POSTGRES_PASSWORD: helpdesk
+    ports:
+      - "5432:5432"
+    volumes:
+      - helpdesk_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: helpdesk-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+
+volumes:
+  helpdesk_data:
