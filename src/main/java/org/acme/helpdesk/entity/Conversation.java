@@ -1,20 +1,18 @@
 package org.acme.helpdesk.entity;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-
-//Defining user roles (Can be part )
-public enum ConversationStatus {
-    WAITING,
-    ACTIVE,
-    CLOSED
-}
+import org.acme.helpdesk.enums.ConversationStatus;
 
 @Entity
 @Table(name = "conversation")
-public class Conversation extends PanacheEntity {
+public class Conversation extends PanacheEntityBase {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)

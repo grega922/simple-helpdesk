@@ -1,0 +1,50 @@
+package org.acme.helpdesk.config;
+
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import org.acme.helpdesk.dto.ErrorResponse;
+import org.jboss.logging.Logger;
+
+@Provider
+public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
+
+    private static final Logger LOG = Logger.getLogger(GlobalExceptionMapper.class);
+
+    // This method handles all exceptions thrown by the application and maps them to appropriate HTTP responses
+    @Override
+    public Response toResponse(Exception exception) {
+        if (exception instanceof NotFoundException e) {
+            return buildResponse("NOT_FOUND", e.getMessage(), 404);
+        }
+        if (exception instanceof BadRequestException e) {
+            return buildResponse("BAD_REQUEST", e.getMessage(), 400);
+        }
+        if (exception instanceof ForbiddenException e) {
+            return buildResponse("FORBIDDEN", e.getMessage(), 403);
+        }
+        if (exception instanceof NotAuthorizedException e) {
+            return buildResponse("UNAUTHORIZED", e.getMessage(), 401);
+        }
+        if (exception instanceof jakarta.validation.ConstraintViolationException e) {
+            String details = e.getConstraintViolations().stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .reduce((a, b) -> a + "; " + b)
+                    .orElse("Validation failed");
+            return buildResponse("VALIDATION_ERROR", details, 400);
+        }
+
+        LOG.error("Unhandled exception", exception);
+        return buildResponse("INTERNAL_ERROR", "An unexpected error occurred", 500);
+    }
+
+    private Response buildResponse(String error, String message, int status) {
+        return Response.status(status)
+                .entity(new ErrorResponse(error, message, status))
+                .build();
+    }
+}
