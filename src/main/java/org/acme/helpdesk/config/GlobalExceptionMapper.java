@@ -1,12 +1,9 @@
 package org.acme.helpdesk.config;
 
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.NotAuthorizedException;
-import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.ext.*;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
+
 import org.acme.helpdesk.dto.ErrorResponse;
 import org.jboss.logging.Logger;
 

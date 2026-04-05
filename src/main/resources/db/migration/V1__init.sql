@@ -13,12 +13,12 @@ CREATE TABLE rooms (
     description TEXT
 );
 
--- 3 - SQL Script to create conversations table
-CREATE TABLE conversations (
+-- 3 - SQL Script to create conversation table
+CREATE TABLE conversation (
     id SERIAL PRIMARY KEY,
-    room_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,     -- User who created the conversation
-    operator_id INTEGER,           -- Operater (nullable, until assigned)
+    room_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,     -- User who created the conversation
+    operator_id BIGINT,           -- Operater (nullable, until assigned)
     status VARCHAR(20) NOT NULL DEFAULT 'WAITING' CHECK (status IN ('WAITING', 'ACTIVE', 'CLOSED')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
@@ -28,16 +28,17 @@ CREATE TABLE conversations (
 );
 
 -- 4 - SQL Script to create messages table
-CREATE TABLE messages (
+CREATE TABLE message (
     id SERIAL PRIMARY KEY,
     conversation_id BIGINT NOT NULL,
     sender_type VARCHAR(20) NOT NULL,
     sender_id BIGINT NOT NULL,
+    title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_conversation
-        FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
+        FOREIGN KEY (conversation_id) REFERENCES conversation(id) ON DELETE CASCADE,
 
     CONSTRAINT fk_sender
         FOREIGN KEY (sender_id) REFERENCES users(id)
@@ -50,6 +51,6 @@ ALTER COLUMN id SET DEFAULT nextval('app_user_seq');
 
 
 --5 - SQL indexes for faster polling
-CREATE INDEX idx_messages_conversation ON messages(conversation_id, created_at);
-CREATE INDEX idx_conversations_status ON conversations(status);
-CREATE INDEX idx_conversations_operator ON conversations(operator_id);
+CREATE INDEX idx_message_conversation ON message(conversation_id, created_at);
+CREATE INDEX idx_conversation_status ON conversation(status);
+CREATE INDEX idx_conversation_operator ON conversation(operator_id);

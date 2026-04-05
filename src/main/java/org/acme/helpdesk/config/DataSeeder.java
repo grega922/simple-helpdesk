@@ -21,7 +21,7 @@ public class DataSeeder {
             LOG.info("Seeding initial users...");
             createUser("JanezNovak", "Janez123",  UserRole.USER);
             createUser("AnaKovac", "Ana456", UserRole.USER);
-            createUser("Marko Krajnc", "Marko789",  UserRole.USER);
+            createUser("MarkoKrajnc", "Marko789",  UserRole.USER);
             createUser("Operater_Petra", "PetraOp123", UserRole.OPERATOR);
             createUser("Operater_Luka", "LukaOp123", UserRole.OPERATOR);
             LOG.info("Seeded 3 users and 2 operators (password: password123)");
@@ -29,9 +29,9 @@ public class DataSeeder {
 
         if (Rooms.count() == 0) {
             LOG.info("Seeding initial rooms...");
-            createRoom("Tehnika", "Tehnična pomoč uporabnikom");
-            createRoom("Storitve", "Informacije o storitvah in naročninah");
-            createRoom("Pogovor", "Splošni pogovor z operaterjem");
+            createRoom("TEHNIKA", "Tehnična pomoč uporabnikom");
+            createRoom("STORITVE", "Informacije o storitvah in naročninah");
+            createRoom("POGOVOR", "Splošni pogovor z operaterjem");
             LOG.info("Seeded 3 rooms");
         }
     }

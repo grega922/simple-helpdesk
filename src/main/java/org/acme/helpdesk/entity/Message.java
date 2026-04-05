@@ -25,6 +25,9 @@ public class Message extends PanacheEntityBase {
     @Column(name= "sender_type" , nullable = false)
     public String senderType;
 
+    @Column(name = "title", nullable = false)
+    public String title;
+
     @Column(nullable = false, length = 4000)
     public String content;
 

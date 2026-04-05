@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import org.acme.helpdesk.enums.ConversationStatus;
 
 @Entity
@@ -32,5 +33,13 @@ public class Conversation extends PanacheEntityBase {
 
     @Column(name = "created_at", nullable = false)
     public LocalDateTime createdAt;
+
+    public static List<Conversation> findByStatus(ConversationStatus status) {
+        return list("status", status);
+    }
+
+    public static List<Conversation> findByUser(Long userId) {
+        return list("user.id", userId);
+    }
     
 }
