@@ -9,7 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class CreateConversationRequest {
 
     @NotNull
-    @Schema(example = "TEHNIKA", enumeration = {"TEHNIKA", "STORITVE", "POGOVOR"})
+    @Schema(example = "TEHNIKA")
     public String room;
 
     @NotBlank

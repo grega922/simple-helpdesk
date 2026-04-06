@@ -49,6 +49,7 @@ public class ConversationService {
         c.room = room;
         c.status = ConversationStatus.WAITING;
         c.user = user;
+        c.title = request.title;
         c.createdAt = LocalDateTime.now();
         c.persist();
 
@@ -57,7 +58,6 @@ public class ConversationService {
         m.conversation = c;
         m.sender = user;
         m.senderType = user.role.name();
-        m.title = request.title;
         m.content = request.message;
         m.createdAt = c.createdAt;
         m.persist();
@@ -65,6 +65,7 @@ public class ConversationService {
         return c;
     }
 
+    //Get conversation by conversation ID
     public Conversation getConversation(Long conversationId) {
         Conversation c = Conversation.findById(conversationId);
         if (c == null) {
@@ -72,6 +73,44 @@ public class ConversationService {
         }
         return c;
     }
+
+    //Get all conversations with waiting status
+    public List<Conversation> getWaitingConversations() {
+        return Conversation.findByStatus(ConversationStatus.WAITING);
+    }
+
+    //Get current operator active conversations
+    public List<Conversation> getOperatorActiveConversations(String operatorName) {
+        User operator = User.findByUsername(operatorName);
+        if (operator == null) {
+            throw new NotFoundException("Operator not found");
+        }
+        return Conversation.list("operator.id = ?1 and status = ?2",
+                operator.id, ConversationStatus.ACTIVE);
+    }
+
+    //Operator take a user conversation to start chatting
+    @Transactional
+    public Conversation takeConversation(Long conversationId, String operatorUsername) {
+        Conversation c = Conversation.findById(conversationId);
+        if (c == null) {
+            throw new NotFoundException("Conversation not found");
+        }
+        if (c.status != ConversationStatus.WAITING) {
+            throw new BadRequestException("Conversation is not in WAITING status");
+        }
+
+        User operator = User.findByUsername(operatorUsername);
+        if (operator == null) {
+            throw new NotFoundException("Operator not found");
+        }
+
+        c.operator = operator;
+        c.status = ConversationStatus.ACTIVE;
+        c.persist();
+        return c;
+    }
+
 
 
 }

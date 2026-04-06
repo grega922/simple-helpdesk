@@ -27,6 +27,9 @@ public class Conversation extends PanacheEntityBase {
     @JoinColumn(name = "operator_id")
     public User operator;
 
+    @Column(name = "title", nullable = false)
+    public String title;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     public ConversationStatus status;

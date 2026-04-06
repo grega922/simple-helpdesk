@@ -19,6 +19,7 @@ CREATE TABLE conversation (
     room_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,     -- User who created the conversation
     operator_id BIGINT,           -- Operater (nullable, until assigned)
+    title VARCHAR(255) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'WAITING' CHECK (status IN ('WAITING', 'ACTIVE', 'CLOSED')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
@@ -33,7 +34,6 @@ CREATE TABLE message (
     conversation_id BIGINT NOT NULL,
     sender_type VARCHAR(20) NOT NULL,
     sender_id BIGINT NOT NULL,
-    title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 

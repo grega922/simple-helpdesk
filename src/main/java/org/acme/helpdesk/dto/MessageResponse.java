@@ -9,19 +9,21 @@ import java.time.LocalDateTime;
 public class MessageResponse {
 
     public Long id;
-    public Long senderId;
+    public String sender;
+    public String title;
     public String content;
     public LocalDateTime createdAt;
 
-    public MessageResponse(Long id, Long senderId, String content, LocalDateTime createdAt) {
+    public MessageResponse(Long id, String sender, String title, String content, LocalDateTime createdAt) {
         this.id = id;
-        this.senderId = senderId;
+        this.sender = sender;
+        this.title = title;
         this.content = content;
         this.createdAt = createdAt;
     }
 
     public static MessageResponse from(Message m) {
-        MessageResponse r = new MessageResponse(m.id, m.sender.id, m.content, m.createdAt);
+        MessageResponse r = new MessageResponse(m.id, m.sender.username, m.conversation.title, m.content, m.createdAt);
         return r;
     }
 }
