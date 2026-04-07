@@ -31,15 +31,25 @@ public class ConversationResponse {
     @Schema(description = "Timestamp when the conversation was created", example = "2023-01-01T10:00:00")
     public LocalDateTime createdAt;
 
+    public ConversationResponse(Long id, String room, ConversationStatus status, String userName, String title, String operatorName, LocalDateTime createdAt) {
+        this.id = id;
+        this.room = room;
+        this.status = status;
+        this.userName = userName;
+        this.title = title;
+        this.operatorName = operatorName;
+        this.createdAt = createdAt;
+    }
+
     public static ConversationResponse from(Conversation c) {
-        ConversationResponse r = new ConversationResponse();
-        r.id = c.id;
-        r.room = c.room.name;
-        r.userName = c.user.username;
-        r.title = c.title;
-        r.operatorName = c.operator != null ? c.operator.username : null;
-        r.status = c.status;
-        r.createdAt = c.createdAt;
-        return r;
+        return new ConversationResponse(
+            c.id,
+            c.room.name,
+            c.status,
+            c.user.username,
+            c.title,
+            c.operator != null ? c.operator.username : null,
+            c.createdAt
+        );
     }
 }

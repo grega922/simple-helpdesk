@@ -24,3 +24,11 @@
 | GET | `/v1/operator/conversations/{id}` | Get conversation details |
 | GET | `/v1/operator/conversations/{id}/messages` | Get messages (supports `?since=` polling) |
 | POST | `/v1/operator/conversations/{id}/messages` | Reply to the user |
+
+### Room Management (`/v1/rooms`) — requires `OPERATOR` role
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/v1/rooms` | List all available rooms |
+| GET | `/v1/rooms/{id}` | Get single room by ID |
+| POST | `/v1/rooms` | Create new room |

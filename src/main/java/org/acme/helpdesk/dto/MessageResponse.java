@@ -40,7 +40,6 @@ public class MessageResponse {
     }
 
     public static MessageResponse from(Message m) {
-        MessageResponse r = new MessageResponse(m.id, m.conversation.id, m.sender.username, m.sender.role.name(), m.conversation.title, m.content, m.createdAt);
-        return r;
+        return new MessageResponse(m.id, m.conversation.id, m.sender.username, m.sender.role.name(), m.conversation.title, m.content, m.createdAt);
     }
 }

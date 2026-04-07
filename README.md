@@ -54,6 +54,8 @@ Use the **Authorize** button in Swagger UI to paste a JWT token obtained from `P
 
 See [APIENDPOINTS.md](APIENDPOINTS.md) for API endpoints quicklist with short descriptions
 
+Postman collections are found in **Simple Helpdesk API.postman_collection.json**
+
 ## Testing
 
 ### Run Unit / Integration Tests
