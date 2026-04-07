@@ -1,83 +1,163 @@
-# code-with-quarkus
+# Simple Helpdesk API
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+REST API for a helpdesk chat system built with [Quarkus](https://quarkus.io/).  
+Users create support conversations, operators claim and respond to them.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Prerequisites
 
-## Running the application in dev mode
+| Tool | Version | Notes |
+|------|---------|-------|
+| **Java** | 17 or 21 | JDK required (e.g. Eclipse Temurin, GraalVM) |
+| **Docker** | 20+ | Required for DevServices (auto-starts PostgreSQL) and production database |
+| **Maven** | 3.9+ | Included via Maven Wrapper (`mvnw` / `mvnw.cmd`) — no separate install needed |
 
-You can run your application in dev mode that enables live coding using:
+> **Windows note:** Use `mvnw.cmd` instead of `./mvnw` for all commands below.
 
-```shell script
+## Quick Start
+
+### 1. Run in Development Mode
+
+Quarkus DevServices automatically starts a PostgreSQL container — no manual database setup required.
+
+```shell
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+The application starts on **http://localhost:8080** with live-reload enabled.  
+The Dev UI is available at **http://localhost:8080/q/dev/**.
 
-## Packaging and running the application
+### 2. Seed Data
 
-The application can be packaged using:
+On first startup the application automatically seeds:
 
-```shell script
+| Type | Username | Password | Role |
+|------|----------|----------|------|
+| User | `JanezNovak` | `Janez123` | USER |
+| User | `AnaKovac` | `Ana456` | USER |
+| User | `MarkoKrajnc` | `Marko789` | USER |
+| Operator | `Operater_Petra` | `PetraOp123` | OPERATOR |
+| Operator | `Operater_Luka` | `LukaOp123` | OPERATOR |
+
+Three rooms are also created: `TEHNIKA`, `STORITVE`, `POGOVOR`.
+
+## API Documentation (Swagger UI)
+
+Available **only in dev mode**:
+
+| Resource | URL |
+|----------|-----|
+| Swagger UI | [http://localhost:8080/q/swagger-ui](http://localhost:8080/q/swagger-ui) |
+
+Use the **Authorize** button in Swagger UI to paste a JWT token obtained from `POST /v1/auth/login`.
+
+## API Endpoints Overview
+
+See [APIENDPOINTS.md](APIENDPOINTS.md) for API endpoints quicklist with short descriptions
+
+## Testing
+
+### Run Unit / Integration Tests
+
+```shell
+./mvnw test
+```
+
+Quarkus DevServices starts a temporary PostgreSQL container for the test run automatically.
+
+### Run with Verbose Output
+
+```shell
+./mvnw test -Dsurefire.useFile=false
+```
+
+### Run a Single Test Class
+
+```shell
+./mvnw test -Dtest=AuthApiTest
+./mvnw test -Dtest=ConversationApiTest
+./mvnw test -Dtest=OperatorApiTest
+```
+
+## Building and Packaging
+
+### Build JAR (Standard)
+
+```shell
 ./mvnw package
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Produces `target/quarkus-app/quarkus-run.jar` (fast-jar format with dependencies in `target/quarkus-app/lib/`).
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### Build Uber-JAR (Single Fat JAR)
 
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
+```shell
 ./mvnw package -Dquarkus.package.jar.type=uber-jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+Produces `target/*-runner.jar` — a single self-contained JAR.
 
-## Creating a native executable
+### Build Native Executable (GraalVM)
 
-You can create a native executable using:
-
-```shell script
+```shell
 ./mvnw package -Dnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+Or build inside a container (no local GraalVM required):
 
-```shell script
+```shell
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+## Production Deployment
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+### 1. Start the Database
 
-## Related Guides
+```shell
+docker compose up -d
+```
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- Flyway ([guide](https://quarkus.io/guides/flyway)): Handle your database schema migrations
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and method parameters for your beans (REST, CDI, Jakarta Persistence)
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- SmallRye JWT ([guide](https://quarkus.io/guides/security-jwt)): Secure your applications with JSON Web Token
-- SmallRye JWT Build ([guide](https://quarkus.io/guides/security-jwt-build)): Create JSON Web Token with SmallRye JWT Build API
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
+This starts:
+- **PostgreSQL 16** on port `5432` (database: `helpdesk_db`, user/password: `helpdesk`)
+- **pgAdmin 4** on port `5050` (login: `admin@admin.com` / `admin`)
 
-## Provided Code
+### 2. Run the Application
 
-### Hibernate ORM
+**From JAR:**
 
-Create your first JPA entity
+```shell
+java -jar target/quarkus-app/quarkus-run.jar
+```
 
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
+**From Uber-JAR:**
 
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
+```shell
+java -jar target/*-runner.jar
+```
 
+**From Native Executable:**
 
-### REST
+```shell
+./target/code-with-quarkus-1.0.0-SNAPSHOT-runner
+```
 
-Easily start your REST Web Services
+The production profile connects to `localhost:5432/helpdesk_db` with credentials `helpdesk/helpdesk` (configured in `application.properties`).
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+### 3. Stop the Database
+
+```shell
+docker compose down
+```
+
+To also remove persisted data:
+
+```shell
+docker compose down -v
+```
+
+## Database Schema
+
+See [DATABASE.md](DATABASE.md) for the full entity-relationship diagram and table definitions.
+
+## Project Structure
+
+See [PROJECT.md](PROJECT.md) for file structure of the project and tech stack used with this project 

@@ -7,15 +7,18 @@ import java.time.LocalDateTime;
 @Schema(description = "Standard error response")
 public class ErrorResponse {
 
+    @Schema(description = "Error type or code", example = "UNAUTHORIZED")
     public String error;
+    
+    @Schema(description = "Error message", example = "You are not authorized to perform this action")
     public String message;
-    public int status;
+    
+    @Schema(description = "Timestamp when the error occurred", example = "2023-01-01T10:00:00")
     public LocalDateTime timestamp;
 
-    public ErrorResponse(String error, String message, int status) {
+    public ErrorResponse(String error, String message) {
         this.error = error;
         this.message = message;
-        this.status = status;
         this.timestamp = LocalDateTime.now();
     }
 }

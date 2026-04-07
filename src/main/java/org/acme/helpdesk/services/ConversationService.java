@@ -11,15 +11,13 @@ import org.acme.helpdesk.entity.Rooms;
 
 import org.acme.helpdesk.dto.CreateConversationRequest;
 import org.acme.helpdesk.enums.ConversationStatus;
-import org.jboss.logging.Logger;
+import org.hibernate.Hibernate;
 
 import java.util.List;
 import java.time.LocalDateTime;
 
 @ApplicationScoped
 public class ConversationService {
-
-    private static final Logger LOG = Logger.getLogger(ConversationService.class);
 
     //Get conversations for current user!
     public List<Conversation> getUserConversations(String username) {
@@ -91,7 +89,7 @@ public class ConversationService {
 
     //Operator take a user conversation to start chatting
     @Transactional
-    public Conversation takeConversation(Long conversationId, String operatorUsername) {
+    public Conversation claimConversation(Long conversationId, String operatorUsername) {
         Conversation c = Conversation.findById(conversationId);
         if (c == null) {
             throw new NotFoundException("Conversation not found");
@@ -108,6 +106,11 @@ public class ConversationService {
         c.operator = operator;
         c.status = ConversationStatus.ACTIVE;
         c.persist();
+
+        //This is because of Lazy loading of user and room in conversation, we need to initialize them before returning
+        Hibernate.initialize(c.room);
+        Hibernate.initialize(c.user);
+
         return c;
     }
 

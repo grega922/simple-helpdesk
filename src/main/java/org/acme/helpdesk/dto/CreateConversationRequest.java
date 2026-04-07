@@ -9,14 +9,14 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class CreateConversationRequest {
 
     @NotNull
-    @Schema(example = "TEHNIKA")
+    @Schema(example = "TEHNIKA", description = "Room for the conversation (e.g. TEHNIKA, POGOVOR, ...)")
     public String room;
 
     @NotBlank
-    @Schema(example = "Naslov sporočila")
+    @Schema(example = "Naslov sporočila", description = "Title of the conversation")
     public String title;
 
     @NotBlank
-    @Schema(example = "Imam težavo z nastavitvami računa.")
+    @Schema(example = "Imam težavo z nastavitvami računa.", description = "Initial message content describing the user's issue")
     public String message;
 }
