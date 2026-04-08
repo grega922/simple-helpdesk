@@ -264,12 +264,12 @@
 							"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"wrongpassword\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/auth/login",
+							"raw": "{{baseUrl}}/v1/auth/login",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
+								"v1",
 								"auth",
 								"login"
 							]
@@ -407,12 +407,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/conversations",
+							"raw": "{{baseUrl}}/v1/conversations",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
+								"v1",
 								"conversations"
 							]
 						}
@@ -538,7 +538,7 @@
 			"name": "3. Operator - Conversations",
 			"item": [
 				{
-					"name": "Waiting Conversations",
+					"name": "WaitingConversations",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -563,7 +563,7 @@
 					"response": []
 				},
 				{
-					"name": "Current Operator Active Conversations",
+					"name": "CurrentOperatorActiveConversations",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -618,7 +618,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Conversation by ID (Operator)",
+					"name": "GetConversationbyID (Operator)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -643,7 +643,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Conversation Messages (Operator)",
+					"name": "GetConversationMessages (Operator)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -653,12 +653,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/operator/conversations/{{conversationId}}/messages",
+							"raw": "{{baseUrl}}/v1/operator/conversations/{{conversationId}}/messages",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
+								"v1",
 								"operator",
 								"conversations",
 								"{{conversationId}}",
@@ -669,7 +669,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Messages - Polling (Operator)",
+					"name": "GetMessages - Polling (Operator)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -679,12 +679,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/operator/conversations/{{conversationId}}/messages?since=2026-01-01T00:00:00",
+							"raw": "{{baseUrl}}/v1/operator/conversations/{{conversationId}}/messages?since=2026-01-01T00:00:00",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"api",
+								"v1",
 								"operator",
 								"conversations",
 								"{{conversationId}}",
@@ -701,7 +701,7 @@
 					"response": []
 				},
 				{
-					"name": "Send Message (Operator)",
+					"name": "SendMessage (Operator)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -849,7 +849,7 @@
 		},
 		{
 			"key": "roomId",
-			"value": ""
+			"value": "2"
 		}
 	]
 }

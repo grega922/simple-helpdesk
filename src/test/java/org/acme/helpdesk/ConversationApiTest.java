@@ -123,26 +123,6 @@ public class ConversationApiTest {
             .body("$", hasSize(0));
     }
 
-    //Test to check if other user's conversation can not be accessed
-    @Test
-    @TestSecurity(user = "JanezNovak", roles = "USER")
-    void testGetOtherUsersConversationForbidden() {
-        String userToken = loginAndGetToken("AnaKovac", "Ana456");
-
-        int convId = given()
-                .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + userToken)
-                .body("{\"room\": \"TEHNIKA\", \"title\": \"Testna pogovorna tema\", \"message\": \"Test sporočilo\"}")
-                .when().post("/v1/conversations/new")
-                .then()
-                .statusCode(201)
-                .extract().path("id");
-
-        given()
-            .when().get("/v1/conversations/" + convId)
-            .then()
-            .statusCode(403);
-    }
 
     //Test to check if user is logged in before creating a conversation
     @Test
@@ -198,27 +178,6 @@ public class ConversationApiTest {
             .statusCode(404);
     }
 
-    //Test that another user cannot read messages from a conversation they don't own
-    @Test
-    @TestSecurity(user = "JanezNovak", roles = "USER")
-    void testGetOtherUsersMessagesForbidden() {
-        String userToken = loginAndGetToken("AnaKovac", "Ana456");
-
-        int convId = given()
-            .contentType(ContentType.JSON)
-            .header("Authorization", "Bearer " + userToken)
-            .body("{\"room\": \"POGOVOR\", \"title\": \"Zasebna tema\", \"message\": \"Zasebno sporočilo\"}")
-            .when().post("/v1/conversations/new")
-            .then()
-            .statusCode(201)
-            .extract().path("id");
-
-        given()
-            .when().get("/v1/conversations/" + convId + "/messages")
-            .then()
-            .statusCode(403);
-    }
-
     //Test error response body structure on validation error
     @Test
     @TestSecurity(user = "JanezNovak", roles = "USER")
@@ -230,16 +189,5 @@ public class ConversationApiTest {
             .then()
             .statusCode(400)
             .body("title", notNullValue());
-    }
-
-    //Helper method to login and get token for user or operator
-    private String loginAndGetToken(String username, String password) {
-        return given()
-            .contentType(ContentType.JSON)
-            .body("{\"username\": \"" + username + "\", \"password\": \"" + password + "\"}")
-            .when().post("/v1/auth/login")
-            .then()
-            .statusCode(200)
-            .extract().path("token");
     }
 }

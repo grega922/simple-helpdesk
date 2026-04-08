@@ -78,6 +78,7 @@ Quarkus DevServices starts a temporary PostgreSQL container for the test run aut
 ./mvnw test -Dtest=AuthApiTest
 ./mvnw test -Dtest=ConversationApiTest
 ./mvnw test -Dtest=OperatorApiTest
+./mvnw test -Dtest=RoomApiTest
 ```
 
 ## Building and Packaging

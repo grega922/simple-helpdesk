@@ -8,7 +8,7 @@ public class LoginResponse {
     @Schema(description = "JWT access token", example = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJza...")
     public String token;
 
-    @Schema(description = "Username of the logged-in user/operator", example = "user1")
+    @Schema(description = "Username of the logged-in user/operator", example = "JanezNovak")
     public String username;
 
     @Schema(description = "Role of the logged-in user/operator", example = "USER")

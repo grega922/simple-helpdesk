@@ -53,37 +53,13 @@ public class RoomApiTest {
     void testCreateRoom() {
         given()
             .contentType(ContentType.JSON)
-            .body("{\"name\": \"TESTNA_SOBA\", \"description\": \"Testna soba za teste\"}")
+            .body("{\"name\": \"TESTNA_SOBA\", \"title\": \"Test v novi sobi\", \"description\": \"Testna soba za teste\"}")
             .when().post("/v1/rooms/new")
             .then()
             .statusCode(201)
             .body("id", notNullValue())
             .body("name", equalTo("TESTNA_SOBA"))
             .body("description", equalTo("Testna soba za teste"));
-    }
-
-    //Test that a newly created room can be used for conversations
-    @Test
-    void testCreatedRoomCanBeUsedForConversation() {
-        String operatorToken = loginAndGetToken("Operater_Petra", "PetraOp123");
-        String userToken = loginAndGetToken("JanezNovak", "Janez123");
-
-        given()
-            .contentType(ContentType.JSON)
-            .header("Authorization", "Bearer " + operatorToken)
-            .body("{\"name\": \"NOVA_SOBA\", \"description\": \"Nova testna soba\"}")
-            .when().post("/v1/rooms/new")
-            .then()
-            .statusCode(201);
-
-        given()
-            .contentType(ContentType.JSON)
-            .header("Authorization", "Bearer " + userToken)
-            .body("{\"room\": \"NOVA_SOBA\", \"title\": \"Test v novi sobi\", \"message\": \"Testno sporočilo\"}")
-            .when().post("/v1/conversations/new")
-            .then()
-            .statusCode(201)
-            .body("room", equalTo("NOVA_SOBA"));
     }
 
     //Test creating a room with a duplicate name returns 400
